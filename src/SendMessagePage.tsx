@@ -12,27 +12,22 @@ export function SendMessagePage() {
       return;
     }
 
-    const webhookUrl = process.env.REACT_APP_SLACK_WEBHOOK_URL;
-    if (!webhookUrl) {
-      setStatus("error");
-      setErrorMsg("Slack webhook not configured");
-      return;
-    }
-
     setLoading(true);
     setStatus("idle");
     setErrorMsg("");
 
     try {
-      const response = await fetch(webhookUrl, {
+      const response = await fetch("https://drippoco-production.up.railway.app/api/send-message", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: message.trim(),
+          message: message.trim(),
         }),
       });
+
+      const data = await response.json();
 
       if (response.ok) {
         setStatus("success");
@@ -40,7 +35,7 @@ export function SendMessagePage() {
         setTimeout(() => setStatus("idle"), 3000);
       } else {
         setStatus("error");
-        setErrorMsg("Failed to send message. Please try again.");
+        setErrorMsg(data.error || "Failed to send message. Please try again.");
       }
     } catch (error) {
       setStatus("error");

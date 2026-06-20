@@ -4,7 +4,10 @@
   "private": true,
   "homepage": "https://kzxwer.github.io/drippoco",
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "gh-pages": "^5.0.0",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
@@ -16,6 +19,7 @@
     "generate:posts-index": "node scripts/generate-posts-index.js",
     "prestart": "pnpm run generate:posts-index",
     "start": "react-scripts start",
+    "start:server": "node server.js",
     "prebuild": "pnpm run generate:posts-index",
     "build": "react-scripts build",
     "predeploy": "pnpm run build",
