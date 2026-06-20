@@ -19,7 +19,7 @@
     "prebuild": "pnpm run generate:posts-index",
     "build": "react-scripts build",
     "predeploy": "pnpm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build --dotfiles"
   },
   "eslintConfig": {
     "extends": [

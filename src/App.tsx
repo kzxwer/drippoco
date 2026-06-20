@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { ArticleDetail } from "./ArticleDetail";
 
 type Draft = {
   title: string;
@@ -220,7 +221,23 @@ function usePublishedArticles() {
 function Shell({ children }: { children: React.ReactNode }) {
   const { categories } = usePublishedArticles();
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("drippoco-dark-mode");
+      return saved !== null ? JSON.parse(saved) : false;
+    }
+    return false;
+  });
   const menuContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem("drippoco-dark-mode", JSON.stringify(darkMode));
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     function handleDocumentMouseDown(event: MouseEvent) {
@@ -240,30 +257,31 @@ function Shell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_#f5f5f4,_#fafaf9_45%,_#f3f4f6)] pb-16">
-      <header className="sticky top-0 z-20 border-b border-zinc-200/70 bg-stone-50/90 backdrop-blur">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_#f5f5f4,_#fafaf9_45%,_#f3f4f6)] dark:bg-[radial-gradient(circle_at_top_right,_#27272a,_#18181b_45%,_#09090b)] pb-16">
+      <header className="sticky top-0 z-20 border-b border-zinc-200/70 dark:border-zinc-700/70 bg-stone-50/90 dark:bg-zinc-900/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-8">
           {/* Left: Logo */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">
               Think and write
             </p>
-            <h1 className="text-xl font-extrabold tracking-tight text-zinc-900">
+            <h1 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
               Drippoco Journal
             </h1>
           </div>
 
           {/* Center: Glasses icon with category menu */}
-          <div
-            className="relative"
-            ref={menuContainerRef}
-          >
+          <div className="relative" ref={menuContainerRef}>
             <button
-              className="text-2xl transition hover:opacity-70"
+              className="transition hover:opacity-70"
               onClick={() => setShowCategoryMenu((prev) => !prev)}
               type="button"
             >
-              👓
+              <img
+                src={`${process.env.PUBLIC_URL}/assets/bookwarm.png`}
+                alt="Categories"
+                className="h-8 w-auto"
+              />
             </button>
 
             {showCategoryMenu && (
@@ -275,30 +293,42 @@ function Shell({ children }: { children: React.ReactNode }) {
                 >
                   All Posts
                 </Link>
-                {categories.map((cat) => (
-                  <Link
-                    className="block px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-                    key={cat}
-                    to={`/category/${encodeCategoryPath(cat)}`}
-                    onClick={() => setShowCategoryMenu(false)}
-                  >
-                    {formatCategoryLabel(cat)}
-                  </Link>
-                ))}
+                {categories.map((cat) =>
+                  cat !== "root" ? (
+                    <Link
+                      className="block px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+                      key={cat}
+                      to={`/category/${encodeCategoryPath(cat)}`}
+                      onClick={() => setShowCategoryMenu(false)}
+                    >
+                      {formatCategoryLabel(cat)}
+                    </Link>
+                  ) : null,
+                )}
               </div>
             )}
           </div>
 
+          {/* Center-Right: Dark mode toggle */}
+          <button
+            className="rounded-full px-3 py-1.5 text-lg transition dark:text-yellow-400"
+            onClick={() => setDarkMode(!darkMode)}
+            type="button"
+            title="Toggle dark mode"
+          >
+            {darkMode ? "🌙" : "☀️"}
+          </button>
+
           {/* Right: Home/Create links */}
-          <nav className="flex items-center gap-2 rounded-full border border-zinc-200 bg-white p-1">
+          <nav className="flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-1">
             <Link
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 transition hover:bg-zinc-100 dark:hover:bg-zinc-700"
               to="/"
             >
               Home
             </Link>
             <Link
-              className="rounded-full bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-zinc-700"
+              className="rounded-full bg-zinc-900 dark:bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-zinc-700 dark:hover:bg-blue-500"
               to="/create-article"
             >
               Create article
@@ -314,11 +344,11 @@ function Shell({ children }: { children: React.ReactNode }) {
 function HomePage() {
   return (
     <main className="flex items-center justify-center px-5 py-16 md:px-8">
-      <div className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-8 text-center shadow-sm md:p-12">
-        <h1 className="font-serif text-lg font-bold text-zinc-900 md:text-xl">
+      <div className="animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-8 text-center shadow-sm md:p-12">
+        <h1 className="font-serif text-lg font-bold text-zinc-900 dark:text-white md:text-xl">
           Hello from Drippoco
         </h1>
-        <p className="mt-4 text-lg text-zinc-600">
+        <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
           Use the glasses icon (👓) above to browse articles by category.
         </p>
       </div>
@@ -348,23 +378,29 @@ function CategoryPage() {
 
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-5 pt-6 md:grid-cols-12 md:px-8">
-      <section className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm md:col-span-4">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900">
+      <section className="animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-5 shadow-sm md:col-span-4">
+        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
           {formatCategoryLabel(categoryPath)}
         </h2>
-        <p className="mt-1 text-sm text-zinc-500">
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           {articles.length} article{articles.length !== 1 ? "s" : ""}
         </p>
 
         {loading ? (
-          <p className="mt-4 text-sm text-zinc-500">Loading...</p>
+          <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+            Loading...
+          </p>
         ) : null}
-        {error ? <p className="mt-4 text-sm text-rose-600">{error}</p> : null}
+        {error ? (
+          <p className="mt-4 text-sm text-rose-600 dark:text-rose-400">
+            {error}
+          </p>
+        ) : null}
 
         {!loading && !error ? (
           <div className="mt-4 space-y-3">
             {articles.length === 0 ? (
-              <p className="text-sm text-zinc-500">
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
                 No posts in this category yet.
               </p>
             ) : (
@@ -372,8 +408,8 @@ function CategoryPage() {
                 <button
                   className={`w-full rounded-xl border px-4 py-3 text-left transition ${
                     selectedArticle?.slug === article.slug
-                      ? "border-zinc-900 bg-zinc-900 text-white"
-                      : "border-zinc-200 bg-white hover:border-zinc-400"
+                      ? "border-zinc-900 dark:border-blue-500 bg-zinc-900 dark:bg-blue-600 text-white"
+                      : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600 text-zinc-900 dark:text-white"
                   }`}
                   key={article.sourcePath}
                   onClick={() => setSelectedSlug(article.slug)}
@@ -385,8 +421,8 @@ function CategoryPage() {
                   <p
                     className={`mt-1 text-sm ${
                       selectedArticle?.slug === article.slug
-                        ? "text-zinc-200"
-                        : "text-zinc-500"
+                        ? "text-zinc-200 dark:text-blue-100"
+                        : "text-zinc-500 dark:text-zinc-400"
                     }`}
                   >
                     {article.summary}
@@ -399,46 +435,7 @@ function CategoryPage() {
       </section>
 
       <section className="md:col-span-8">
-        {selectedArticle ? (
-          <article className="animate-rise overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
-            {selectedArticle.cover ? (
-              <img
-                alt={selectedArticle.title}
-                className="h-56 w-full object-cover"
-                src={selectedArticle.cover}
-              />
-            ) : null}
-            <div className="p-6 md:p-8">
-              <h3 className="font-serif text-3xl font-semibold leading-tight text-zinc-900">
-                {selectedArticle.title}
-              </h3>
-              <p className="mt-3 text-lg text-zinc-600">
-                {selectedArticle.summary}
-              </p>
-              {selectedArticle.tags.length > 0 ? (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {selectedArticle.tags.map((tag) => (
-                    <span
-                      className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600"
-                      key={`${selectedArticle.slug}-${tag}`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-              <div className="article-body prose prose-zinc mt-6 max-w-none prose-headings:font-sans prose-headings:font-semibold prose-p:font-serif prose-p:text-lg prose-pre:overflow-x-auto">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {selectedArticle.markdown}
-                </ReactMarkdown>
-              </div>
-            </div>
-          </article>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-8 text-zinc-500 shadow-sm">
-            No articles in this category yet.
-          </div>
-        )}
+        <ArticleDetail article={selectedArticle} />
       </section>
     </main>
   );
@@ -540,11 +537,11 @@ function CreateArticlePage() {
 
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-5 pt-6 md:grid-cols-12 md:px-8">
-      <section className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm md:col-span-6">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900">
+      <section className="animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-5 shadow-sm md:col-span-6">
+        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
           Create article
         </h2>
-        <p className="mt-1 text-sm text-zinc-500">
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           Write markdown, preview live, and download a <code>.md</code> post
           file.
         </p>
@@ -596,21 +593,21 @@ function CreateArticlePage() {
 
         <div className="mt-4 grid grid-cols-2 gap-2">
           <button
-            className="rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
+            className="rounded-xl bg-zinc-900 dark:bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:hover:bg-blue-500"
             onClick={saveDraft}
             type="button"
           >
             {editingId ? "Update draft" : "Save draft"}
           </button>
           <button
-            className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100"
+            className="rounded-xl border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 px-4 py-2.5 text-sm font-semibold text-zinc-700 dark:text-white transition hover:bg-zinc-100 dark:hover:bg-zinc-600"
             onClick={resetEditor}
             type="button"
           >
             Reset
           </button>
           <button
-            className="col-span-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500"
+            className="col-span-2 rounded-xl bg-emerald-600 dark:bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500 dark:hover:bg-emerald-600"
             onClick={downloadArticle}
             type="button"
           >
@@ -618,10 +615,16 @@ function CreateArticlePage() {
           </button>
         </div>
 
-        {notice ? <p className="mt-3 text-sm text-zinc-600">{notice}</p> : null}
+        {notice ? (
+          <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+            {notice}
+          </p>
+        ) : null}
 
-        <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-600">
-          <p className="font-semibold text-zinc-800">Publishing flow</p>
+        <div className="mt-6 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-700 p-4 text-sm text-zinc-600 dark:text-zinc-300">
+          <p className="font-semibold text-zinc-800 dark:text-white">
+            Publishing flow
+          </p>
           <p className="mt-1">1. Download markdown file from here.</p>
           <p>
             2. Move it to <code>public/posts/[any-path]/</code>.
@@ -631,37 +634,39 @@ function CreateArticlePage() {
       </section>
 
       <section className="space-y-4 md:col-span-6">
-        <div className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-bold tracking-tight text-zinc-900">
+        <div className="animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-5 shadow-sm">
+          <h3 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
             Drafts
           </h3>
           {drafts.length === 0 ? (
-            <p className="mt-2 text-sm text-zinc-500">No drafts yet.</p>
+            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+              No drafts yet.
+            </p>
           ) : (
             <div className="mt-3 space-y-2">
               {drafts.map((item) => (
                 <div
-                  className="flex items-center justify-between rounded-xl border border-zinc-200 px-3 py-2"
+                  className="flex items-center justify-between rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-700 px-3 py-2"
                   key={item.id}
                 >
                   <div>
-                    <p className="text-sm font-semibold text-zinc-900">
+                    <p className="text-sm font-semibold text-zinc-900 dark:text-white">
                       {item.title || "Untitled draft"}
                     </p>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
                       {item.slug || slugify(item.title || "") || "no-slug"}
                     </p>
                   </div>
                   <div className="flex gap-2">
                     <button
-                      className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                      className="rounded-lg border border-zinc-300 dark:border-zinc-600 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-600"
                       onClick={() => editDraft(item)}
                       type="button"
                     >
                       Edit
                     </button>
                     <button
-                      className="rounded-lg border border-rose-200 px-2.5 py-1 text-xs font-medium text-rose-700 hover:bg-rose-50"
+                      className="rounded-lg border border-rose-200 dark:border-rose-900 px-2.5 py-1 text-xs font-medium text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/50"
                       onClick={() => deleteDraft(item.id)}
                       type="button"
                     >
@@ -674,7 +679,7 @@ function CreateArticlePage() {
           )}
         </div>
 
-        <article className="animate-rise overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm md:max-h-[560px] md:overflow-y-auto">
+        <article className="animate-rise overflow-hidden rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 shadow-sm md:max-h-[560px] md:overflow-y-auto">
           {draft.cover ? (
             <img
               alt="Preview cover"
@@ -683,10 +688,10 @@ function CreateArticlePage() {
             />
           ) : null}
           <div className="p-5 md:p-6">
-            <h3 className="font-serif text-2xl font-semibold leading-tight text-zinc-900">
+            <h3 className="font-serif text-2xl font-semibold leading-tight text-zinc-900 dark:text-white">
               {draft.title || "Preview title"}
             </h3>
-            <p className="mt-2 text-base text-zinc-600">
+            <p className="mt-2 text-base text-zinc-600 dark:text-zinc-400">
               {draft.summary || "Preview summary"}
             </p>
             {draft.tags.trim() ? (
@@ -697,7 +702,7 @@ function CreateArticlePage() {
                   .filter(Boolean)
                   .map((tag) => (
                     <span
-                      className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600"
+                      className="rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-700 px-3 py-1 text-xs font-medium text-zinc-600 dark:text-zinc-300"
                       key={tag}
                     >
                       {tag}
@@ -705,7 +710,7 @@ function CreateArticlePage() {
                   ))}
               </div>
             ) : null}
-            <div className="article-body prose prose-zinc mt-4 max-w-none prose-headings:font-sans prose-headings:font-semibold prose-p:font-serif prose-p:text-base prose-pre:overflow-x-auto">
+            <div className="article-body prose dark:prose-invert prose-zinc mt-4 max-w-none prose-headings:font-sans prose-headings:font-semibold prose-p:font-serif prose-p:text-base prose-pre:overflow-x-auto">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {previewMarkdown}
               </ReactMarkdown>

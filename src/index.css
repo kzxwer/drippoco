@@ -20,6 +20,6 @@
   }
 
   .article-body p {
-    @apply my-4 font-serif text-lg leading-8 text-zinc-700;
+    @apply my-4 font-serif text-lg leading-8 text-zinc-700 dark:text-zinc-300;
   }
 }
