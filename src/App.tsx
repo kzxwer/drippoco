@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BrowserRouter,
   Link,
@@ -70,7 +70,7 @@ function readFrontmatter(fileText: string): Frontmatter {
 
   const rawMeta = fileText.slice(4, end).trim();
   const body = fileText.slice(end + 5).trim();
-  const meta = {};
+  const meta: Record<string, string> = {};
 
   rawMeta.split("\n").forEach((line) => {
     const separator = line.indexOf(":");
@@ -220,6 +220,24 @@ function usePublishedArticles() {
 function Shell({ children }: { children: React.ReactNode }) {
   const { categories } = usePublishedArticles();
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const menuContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleDocumentMouseDown(event: MouseEvent) {
+      if (!menuContainerRef.current) return;
+      const targetNode = event.target as Node | null;
+      if (!targetNode) return;
+      if (!menuContainerRef.current.contains(targetNode)) {
+        setShowCategoryMenu(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleDocumentMouseDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentMouseDown);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_#f5f5f4,_#fafaf9_45%,_#f3f4f6)] pb-16">
@@ -238,11 +256,11 @@ function Shell({ children }: { children: React.ReactNode }) {
           {/* Center: Glasses icon with category menu */}
           <div
             className="relative"
-            onMouseEnter={() => setShowCategoryMenu(true)}
-            onMouseLeave={() => setShowCategoryMenu(false)}
+            ref={menuContainerRef}
           >
             <button
               className="text-2xl transition hover:opacity-70"
+              onClick={() => setShowCategoryMenu((prev) => !prev)}
               type="button"
             >
               👓
@@ -522,7 +540,7 @@ function CreateArticlePage() {
 
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-5 pt-6 md:grid-cols-12 md:px-8">
-      <section className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm md:col-span-5">
+      <section className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm md:col-span-6">
         <h2 className="text-lg font-bold tracking-tight text-zinc-900">
           Create article
         </h2>
@@ -612,7 +630,7 @@ function CreateArticlePage() {
         </div>
       </section>
 
-      <section className="space-y-4 md:col-span-7">
+      <section className="space-y-4 md:col-span-6">
         <div className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm">
           <h3 className="text-lg font-bold tracking-tight text-zinc-900">
             Drafts
@@ -656,19 +674,19 @@ function CreateArticlePage() {
           )}
         </div>
 
-        <article className="animate-rise overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
+        <article className="animate-rise overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm md:max-h-[560px] md:overflow-y-auto">
           {draft.cover ? (
             <img
               alt="Preview cover"
-              className="h-48 w-full object-cover"
+              className="h-36 w-full object-cover"
               src={draft.cover}
             />
           ) : null}
-          <div className="p-6 md:p-8">
-            <h3 className="font-serif text-3xl font-semibold leading-tight text-zinc-900">
+          <div className="p-5 md:p-6">
+            <h3 className="font-serif text-2xl font-semibold leading-tight text-zinc-900">
               {draft.title || "Preview title"}
             </h3>
-            <p className="mt-2 text-lg text-zinc-600">
+            <p className="mt-2 text-base text-zinc-600">
               {draft.summary || "Preview summary"}
             </p>
             {draft.tags.trim() ? (
@@ -687,7 +705,7 @@ function CreateArticlePage() {
                   ))}
               </div>
             ) : null}
-            <div className="article-body prose prose-zinc mt-6 max-w-none prose-headings:font-sans prose-headings:font-semibold prose-p:font-serif prose-p:text-lg prose-pre:overflow-x-auto">
+            <div className="article-body prose prose-zinc mt-4 max-w-none prose-headings:font-sans prose-headings:font-semibold prose-p:font-serif prose-p:text-base prose-pre:overflow-x-auto">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {previewMarkdown}
               </ReactMarkdown>
