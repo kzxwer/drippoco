@@ -17,15 +17,18 @@ export function SendMessagePage() {
     setErrorMsg("");
 
     try {
-      const response = await fetch("https://drippoco-production.up.railway.app/api/send-message", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://drippoco-production.up.railway.app/api/send-message",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: message.trim(),
+          }),
         },
-        body: JSON.stringify({
-          message: message.trim(),
-        }),
-      });
+      );
 
       const data = await response.json();
 
