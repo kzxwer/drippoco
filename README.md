@@ -1,6 +1,13 @@
 # Drippoco Blog
 
-React app configured for GitHub Pages deployment.
+React + Tailwind markdown blog configured for GitHub Pages deployment.
+
+## Content Model (No DB)
+
+- Published articles are markdown files under `public/posts/**`.
+- `/create-article` is an editor page with live markdown preview.
+- Draft `Edit/Delete` is stored only in browser `localStorage`.
+- There is no written date field.
 
 ## Local Development
 
@@ -9,10 +16,50 @@ npm install
 npm start
 ```
 
+Or with pnpm:
+
+```bash
+pnpm install
+pnpm start
+```
+
 ## Build
 
 ```bash
 npm run build
+```
+
+Or with pnpm:
+
+```bash
+pnpm run build
+```
+
+Build/start automatically generates `public/posts/index.json` from files in `public/posts/**`.
+
+## Write and Publish Flow
+
+1. Open `/create-article`.
+2. Write markdown and check live preview.
+3. Save drafts locally if needed (edit/delete supported on that page).
+4. Click `Download article file`.
+5. Move downloaded `.md` file into `public/posts/[any-path]/`.
+6. Deploy.
+7. The file appears as a new article on `/`.
+
+### Markdown File Format
+
+```md
+---
+title: Your title
+summary: Short summary
+tags: tag1, tag2
+cover: https://example.com/image.jpg
+---
+
+# Article heading
+
+Your markdown body...
 ```
 
 ## Deploy to GitHub Pages
@@ -42,3 +89,9 @@ npm run deploy
 ```
 
 Manual deployment publishes the `build/` folder to the `gh-pages` branch.
+
+With pnpm, run script form (not `pnpm deploy`):
+
+```bash
+pnpm run deploy
+```
