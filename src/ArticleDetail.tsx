@@ -27,6 +27,13 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
 
   return (
     <div className="bg-stone-50 dark:bg-zinc-900 rounded-lg p-8 shadow-sm border border-stone-200 dark:border-zinc-800">
+      {article.cover && (
+        <img
+          src={`/drippoco/assets/${article.cover}`}
+          alt={article.title}
+          className="w-full h-64 object-cover rounded-lg mb-8"
+        />
+      )}
       <h1 className="text-4xl font-bold mb-4 text-stone-900 dark:text-zinc-100">
         {article.title}
       </h1>
