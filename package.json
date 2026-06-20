@@ -18,7 +18,8 @@
   "scripts": {
     "generate:posts-index": "node scripts/generate-posts-index.js",
     "prestart": "pnpm run generate:posts-index",
-    "start": "react-scripts start",
+    "start": "node server.js",
+    "start:web": "react-scripts start",
     "start:server": "node server.js",
     "prebuild": "pnpm run generate:posts-index",
     "build": "react-scripts build",
