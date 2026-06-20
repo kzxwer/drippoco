@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/drippoco/static/css/main.4870a3cb.css",
-    "main.js": "/drippoco/static/js/main.7350d286.js",
+    "main.css": "/drippoco/static/css/main.f042aec2.css",
+    "main.js": "/drippoco/static/js/main.be23cc9d.js",
     "index.html": "/drippoco/index.html",
-    "main.4870a3cb.css.map": "/drippoco/static/css/main.4870a3cb.css.map",
-    "main.7350d286.js.map": "/drippoco/static/js/main.7350d286.js.map"
+    "main.f042aec2.css.map": "/drippoco/static/css/main.f042aec2.css.map",
+    "main.be23cc9d.js.map": "/drippoco/static/js/main.be23cc9d.js.map"
   },
   "entrypoints": [
-    "static/css/main.4870a3cb.css",
-    "static/js/main.7350d286.js"
+    "static/css/main.f042aec2.css",
+    "static/js/main.be23cc9d.js"
   ]
 }
