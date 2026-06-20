@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -147,7 +154,9 @@ function usePublishedArticles() {
         }
 
         const indexPayload = await indexResponse.json();
-        const files = Array.isArray(indexPayload.files) ? indexPayload.files : [];
+        const files = Array.isArray(indexPayload.files)
+          ? indexPayload.files
+          : [];
 
         const loaded = await Promise.all(
           files.map(async (filePath: string) => {
@@ -166,9 +175,8 @@ function usePublishedArticles() {
 
             // Extract category from path: "design/article.md" -> "design", "article.md" -> "root"
             const pathParts = filePath.split("/");
-            const categoryPath = pathParts.length > 1 
-              ? pathParts.slice(0, -1).join("/") 
-              : "root";
+            const categoryPath =
+              pathParts.length > 1 ? pathParts.slice(0, -1).join("/") : "root";
 
             return {
               slug,
@@ -183,7 +191,7 @@ function usePublishedArticles() {
               sourcePath: filePath,
               categoryPath,
             };
-          })
+          }),
         );
 
         setAllArticles(loaded);
@@ -193,7 +201,10 @@ function usePublishedArticles() {
         const uniqueCategories = Array.from(categorySet).sort();
         setCategories(uniqueCategories);
       } catch (loadError) {
-        const message = loadError instanceof Error ? loadError.message : "Failed to load posts.";
+        const message =
+          loadError instanceof Error
+            ? loadError.message
+            : "Failed to load posts.";
         setError(message);
       } finally {
         setLoading(false);
@@ -217,7 +228,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           {/* Left: Logo */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
-              Markdown File Workflow
+              Think and write
             </p>
             <h1 className="text-xl font-extrabold tracking-tight text-zinc-900">
               Drippoco Journal
@@ -225,22 +236,20 @@ function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Center: Glasses icon with category menu */}
-          <div className="relative">
+          <div
+            className="relative"
+            onMouseEnter={() => setShowCategoryMenu(true)}
+            onMouseLeave={() => setShowCategoryMenu(false)}
+          >
             <button
               className="text-2xl transition hover:opacity-70"
-              onMouseEnter={() => setShowCategoryMenu(true)}
-              onMouseLeave={() => setShowCategoryMenu(false)}
               type="button"
             >
               👓
             </button>
 
             {showCategoryMenu && (
-              <div
-                className="absolute left-1/2 top-12 -translate-x-1/2 transform whitespace-nowrap rounded-lg border border-zinc-200 bg-white shadow-lg"
-                onMouseEnter={() => setShowCategoryMenu(true)}
-                onMouseLeave={() => setShowCategoryMenu(false)}
-              >
+              <div className="absolute left-1/2 top-12 -translate-x-1/2 transform whitespace-nowrap rounded-lg border border-zinc-200 bg-white shadow-lg">
                 <Link
                   className="block px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 first:rounded-t-lg"
                   to="/"
@@ -288,7 +297,7 @@ function HomePage() {
   return (
     <main className="flex items-center justify-center px-5 py-16 md:px-8">
       <div className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-8 text-center shadow-sm md:p-12">
-        <h1 className="font-serif text-5xl font-bold text-zinc-900 md:text-6xl">
+        <h1 className="font-serif text-lg font-bold text-zinc-900 md:text-xl">
           Hello from Drippoco
         </h1>
         <p className="mt-4 text-lg text-zinc-600">
@@ -307,12 +316,12 @@ function CategoryPage() {
 
   const articles = useMemo(
     () => allArticles.filter((a) => a.categoryPath === categoryPath),
-    [allArticles, categoryPath]
+    [allArticles, categoryPath],
   );
 
   const selectedArticle = useMemo(
     () => articles.find((a) => a.slug === selectedSlug) || articles[0],
-    [articles, selectedSlug]
+    [articles, selectedSlug],
   );
 
   useEffect(() => {
@@ -329,13 +338,17 @@ function CategoryPage() {
           {articles.length} article{articles.length !== 1 ? "s" : ""}
         </p>
 
-        {loading ? <p className="mt-4 text-sm text-zinc-500">Loading...</p> : null}
+        {loading ? (
+          <p className="mt-4 text-sm text-zinc-500">Loading...</p>
+        ) : null}
         {error ? <p className="mt-4 text-sm text-rose-600">{error}</p> : null}
 
         {!loading && !error ? (
           <div className="mt-4 space-y-3">
             {articles.length === 0 ? (
-              <p className="text-sm text-zinc-500">No posts in this category yet.</p>
+              <p className="text-sm text-zinc-500">
+                No posts in this category yet.
+              </p>
             ) : (
               articles.map((article) => (
                 <button
@@ -348,10 +361,14 @@ function CategoryPage() {
                   onClick={() => setSelectedSlug(article.slug)}
                   type="button"
                 >
-                  <p className="text-base font-semibold tracking-tight">{article.title}</p>
+                  <p className="text-base font-semibold tracking-tight">
+                    {article.title}
+                  </p>
                   <p
                     className={`mt-1 text-sm ${
-                      selectedArticle?.slug === article.slug ? "text-zinc-200" : "text-zinc-500"
+                      selectedArticle?.slug === article.slug
+                        ? "text-zinc-200"
+                        : "text-zinc-500"
                     }`}
                   >
                     {article.summary}
@@ -377,7 +394,9 @@ function CategoryPage() {
               <h3 className="font-serif text-3xl font-semibold leading-tight text-zinc-900">
                 {selectedArticle.title}
               </h3>
-              <p className="mt-3 text-lg text-zinc-600">{selectedArticle.summary}</p>
+              <p className="mt-3 text-lg text-zinc-600">
+                {selectedArticle.summary}
+              </p>
               {selectedArticle.tags.length > 0 ? (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {selectedArticle.tags.map((tag) => (
@@ -425,7 +444,9 @@ function CreateArticlePage() {
     localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts));
   }, [drafts]);
 
-  function updateDraft(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function updateDraft(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
     const { name, value } = event.target;
     setDraft((prev) => ({ ...prev, [name]: value }));
   }
@@ -438,7 +459,9 @@ function CreateArticlePage() {
 
     if (editingId) {
       setDrafts((prev) =>
-        prev.map((item) => (item.id === editingId ? { ...item, ...draft } : item))
+        prev.map((item) =>
+          item.id === editingId ? { ...item, ...draft } : item,
+        ),
       );
       setNotice("Draft updated.");
       return;
@@ -485,9 +508,12 @@ function CreateArticlePage() {
     }
 
     const fileContent = buildMarkdownFile(draft);
-    const fileSlug = draft.slug.trim() || slugify(draft.title) || "untitled-article";
+    const fileSlug =
+      draft.slug.trim() || slugify(draft.title) || "untitled-article";
     downloadTextFile(`${fileSlug}.md`, fileContent);
-    setNotice("Markdown file downloaded. Move it into public/posts/... then deploy.");
+    setNotice(
+      "Markdown file downloaded. Move it into public/posts/... then deploy.",
+    );
   }
 
   const previewMarkdown = draft.markdown.trim()
@@ -497,9 +523,12 @@ function CreateArticlePage() {
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-5 pt-6 md:grid-cols-12 md:px-8">
       <section className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm md:col-span-5">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900">Create article</h2>
+        <h2 className="text-lg font-bold tracking-tight text-zinc-900">
+          Create article
+        </h2>
         <p className="mt-1 text-sm text-zinc-500">
-          Write markdown, preview live, and download a <code>.md</code> post file.
+          Write markdown, preview live, and download a <code>.md</code> post
+          file.
         </p>
 
         <div className="mt-4 space-y-3">
@@ -576,14 +605,18 @@ function CreateArticlePage() {
         <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-600">
           <p className="font-semibold text-zinc-800">Publishing flow</p>
           <p className="mt-1">1. Download markdown file from here.</p>
-          <p>2. Move it to <code>public/posts/[any-path]/</code>.</p>
+          <p>
+            2. Move it to <code>public/posts/[any-path]/</code>.
+          </p>
           <p>3. Run deploy. The post is auto-indexed and appears on Home.</p>
         </div>
       </section>
 
       <section className="space-y-4 md:col-span-7">
         <div className="animate-rise rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-bold tracking-tight text-zinc-900">Drafts</h3>
+          <h3 className="text-lg font-bold tracking-tight text-zinc-900">
+            Drafts
+          </h3>
           {drafts.length === 0 ? (
             <p className="mt-2 text-sm text-zinc-500">No drafts yet.</p>
           ) : (
@@ -594,8 +627,12 @@ function CreateArticlePage() {
                   key={item.id}
                 >
                   <div>
-                    <p className="text-sm font-semibold text-zinc-900">{item.title || "Untitled draft"}</p>
-                    <p className="text-xs text-zinc-500">{item.slug || slugify(item.title || "") || "no-slug"}</p>
+                    <p className="text-sm font-semibold text-zinc-900">
+                      {item.title || "Untitled draft"}
+                    </p>
+                    <p className="text-xs text-zinc-500">
+                      {item.slug || slugify(item.title || "") || "no-slug"}
+                    </p>
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -621,13 +658,19 @@ function CreateArticlePage() {
 
         <article className="animate-rise overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
           {draft.cover ? (
-            <img alt="Preview cover" className="h-48 w-full object-cover" src={draft.cover} />
+            <img
+              alt="Preview cover"
+              className="h-48 w-full object-cover"
+              src={draft.cover}
+            />
           ) : null}
           <div className="p-6 md:p-8">
             <h3 className="font-serif text-3xl font-semibold leading-tight text-zinc-900">
               {draft.title || "Preview title"}
             </h3>
-            <p className="mt-2 text-lg text-zinc-600">{draft.summary || "Preview summary"}</p>
+            <p className="mt-2 text-lg text-zinc-600">
+              {draft.summary || "Preview summary"}
+            </p>
             {draft.tags.trim() ? (
               <div className="mt-4 flex flex-wrap gap-2">
                 {draft.tags
@@ -645,7 +688,9 @@ function CreateArticlePage() {
               </div>
             ) : null}
             <div className="article-body prose prose-zinc mt-6 max-w-none prose-headings:font-sans prose-headings:font-semibold prose-p:font-serif prose-p:text-lg prose-pre:overflow-x-auto">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{previewMarkdown}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {previewMarkdown}
+              </ReactMarkdown>
             </div>
           </div>
         </article>

@@ -14,11 +14,11 @@
   },
   "scripts": {
     "generate:posts-index": "node scripts/generate-posts-index.js",
-    "prestart": "npm run generate:posts-index",
+    "prestart": "pnpm run generate:posts-index",
     "start": "react-scripts start",
-    "prebuild": "npm run generate:posts-index",
+    "prebuild": "pnpm run generate:posts-index",
     "build": "react-scripts build",
-    "predeploy": "npm run build",
+    "predeploy": "pnpm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
