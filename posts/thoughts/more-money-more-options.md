@@ -1,9 +1,10 @@
 ---
 title: More Money, More Options
-summary: 
+summary:
 tags: death spiral, ai, future, money
-cover: 
+cover: road.png
 ---
+
 Lately, I've been paying much more attention to investing in stocks. The reason is simple: watching the rapid advancement of AI has made me realize that I need to accumulate more capital.
 
 Some people may think the idea that AI will replace jobs is exaggerated or unrealistic. Others may believe that their own jobs will remain safe no matter what happens. Whether those fears ultimately become reality or not, I believe it is important to prepare for that possibility.
