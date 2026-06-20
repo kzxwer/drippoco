@@ -3,24 +3,32 @@ const cors = require("cors");
 const fetch = require("node-fetch");
 
 const app = express();
-app.use(express.json());
 
 const allowedOrigins = ["https://kzxwer.github.io", "http://localhost:3000"];
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
 
-      callback(new Error("Not allowed by CORS"));
-    },
-  }),
-);
+    callback(null, false);
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+app.use(express.json());
 
 const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+
+app.get("/", (_req, res) => {
+  res.json({ status: "ok", service: "drippoco-api" });
+});
 
 app.post("/api/send-message", async (req, res) => {
   const { message } = req.body;
