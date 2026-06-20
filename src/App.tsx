@@ -3,9 +3,36 @@ import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from "react-r
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+type Draft = {
+  title: string;
+  slug: string;
+  summary: string;
+  cover: string;
+  tags: string;
+  markdown: string;
+};
+
+type Article = {
+  slug: string;
+  title: string;
+  summary: string;
+  cover: string;
+  tags: string[];
+  markdown: string;
+  sourcePath: string;
+  categoryPath: string;
+};
+
+type Frontmatter = {
+  meta: Record<string, string>;
+  body: string;
+};
+
+type DraftItem = Draft & { id: string };
+
 const DRAFTS_KEY = "drippoco-md-drafts-v1";
 
-const emptyDraft = {
+const emptyDraft: Draft = {
   title: "",
   slug: "",
   summary: "",
@@ -15,7 +42,7 @@ const emptyDraft = {
 };
 
 // Helper functions
-function slugify(value) {
+function slugify(value: string): string {
   return value
     .toLowerCase()
     .trim()
@@ -24,7 +51,7 @@ function slugify(value) {
     .replace(/-+/g, "-");
 }
 
-function readFrontmatter(fileText) {
+function readFrontmatter(fileText: string): Frontmatter {
   if (!fileText.startsWith("---\n")) {
     return { meta: {}, body: fileText };
   }
@@ -49,7 +76,7 @@ function readFrontmatter(fileText) {
   return { meta, body };
 }
 
-function buildMarkdownFile(draft) {
+function buildMarkdownFile(draft: Draft): string {
   const tags = draft.tags
     .split(",")
     .map((tag) => tag.trim())
@@ -69,7 +96,7 @@ function buildMarkdownFile(draft) {
   return `${frontmatterLines.join("\n")}${draft.markdown.trim()}\n`;
 }
 
-function downloadTextFile(filename, content) {
+function downloadTextFile(filename: string, content: string): void {
   const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -81,7 +108,7 @@ function downloadTextFile(filename, content) {
   URL.revokeObjectURL(url);
 }
 
-function formatCategoryLabel(categoryPath) {
+function formatCategoryLabel(categoryPath: string): string {
   if (!categoryPath || categoryPath === "root") return "All Posts";
   return categoryPath
     .split("/")
@@ -89,19 +116,19 @@ function formatCategoryLabel(categoryPath) {
     .join(" / ");
 }
 
-function encodeCategoryPath(categoryPath) {
+function encodeCategoryPath(categoryPath: string): string {
   if (!categoryPath || categoryPath === "root") return "";
   return encodeURIComponent(categoryPath);
 }
 
-function decodeCategoryPath(encoded) {
+function decodeCategoryPath(encoded: string): string {
   if (!encoded) return "root";
   return decodeURIComponent(encoded);
 }
 
 function usePublishedArticles() {
-  const [allArticles, setAllArticles] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -123,7 +150,7 @@ function usePublishedArticles() {
         const files = Array.isArray(indexPayload.files) ? indexPayload.files : [];
 
         const loaded = await Promise.all(
-          files.map(async (filePath) => {
+          files.map(async (filePath: string) => {
             const response = await fetch(`${base}/posts/${filePath}`, {
               cache: "no-store",
             });
@@ -166,7 +193,8 @@ function usePublishedArticles() {
         const uniqueCategories = Array.from(categorySet).sort();
         setCategories(uniqueCategories);
       } catch (loadError) {
-        setError(loadError.message || "Failed to load posts.");
+        const message = loadError instanceof Error ? loadError.message : "Failed to load posts.";
+        setError(message);
       } finally {
         setLoading(false);
       }
@@ -178,7 +206,7 @@ function usePublishedArticles() {
   return { allArticles, categories, loading, error };
 }
 
-function Shell({ children }) {
+function Shell({ children }: { children: React.ReactNode }) {
   const { categories } = usePublishedArticles();
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
@@ -272,7 +300,7 @@ function HomePage() {
 }
 
 function CategoryPage() {
-  const { encodedPath } = useParams();
+  const { encodedPath = "" } = useParams<{ encodedPath: string }>();
   const categoryPath = decodeCategoryPath(encodedPath);
   const { allArticles, loading, error } = usePublishedArticles();
   const [selectedSlug, setSelectedSlug] = useState("");
@@ -381,7 +409,7 @@ function CategoryPage() {
 
 function CreateArticlePage() {
   const [draft, setDraft] = useState(emptyDraft);
-  const [drafts, setDrafts] = useState(() => {
+  const [drafts, setDrafts] = useState<DraftItem[]>(() => {
     try {
       const raw = localStorage.getItem(DRAFTS_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
@@ -397,7 +425,7 @@ function CreateArticlePage() {
     localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts));
   }, [drafts]);
 
-  function updateDraft(event) {
+  function updateDraft(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;
     setDraft((prev) => ({ ...prev, [name]: value }));
   }
@@ -422,7 +450,7 @@ function CreateArticlePage() {
     setNotice("Draft saved.");
   }
 
-  function editDraft(item) {
+  function editDraft(item: DraftItem) {
     setEditingId(item.id);
     setDraft({
       title: item.title || "",
@@ -435,7 +463,7 @@ function CreateArticlePage() {
     setNotice("Editing selected draft.");
   }
 
-  function deleteDraft(id) {
+  function deleteDraft(id: string) {
     setDrafts((prev) => prev.filter((item) => item.id !== id));
     if (editingId === id) {
       setEditingId("");
