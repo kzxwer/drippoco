@@ -10,6 +10,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ArticleDetail } from "./ArticleDetail";
+import { SendMessagePage } from "./SendMessagePage";
 
 type Draft = {
   title: string;
@@ -328,6 +329,12 @@ function Shell({ children }: { children: React.ReactNode }) {
               Home
             </Link>
             <Link
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 transition hover:bg-zinc-100 dark:hover:bg-zinc-700"
+              to="/send-message"
+            >
+              Message
+            </Link>
+            <Link
               className="rounded-full bg-zinc-900 dark:bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-zinc-700 dark:hover:bg-blue-500"
               to="/create-article"
             >
@@ -361,6 +368,7 @@ function CategoryPage() {
   const categoryPath = decodeCategoryPath(encodedPath);
   const { allArticles, loading, error } = usePublishedArticles();
   const [selectedSlug, setSelectedSlug] = useState("");
+  const [menuOpen, setMenuOpen] = useState(true);
 
   const articles = useMemo(
     () => allArticles.filter((a) => a.categoryPath === categoryPath),
@@ -378,10 +386,22 @@ function CategoryPage() {
 
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-5 pt-6 md:grid-cols-12 md:px-8">
-      <section className="animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-5 shadow-sm md:col-span-4">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
-          {formatCategoryLabel(categoryPath)}
-        </h2>
+      <section
+        className={`animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-5 shadow-sm md:col-span-4 ${!menuOpen ? "hidden lg:block" : ""}`}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
+            {formatCategoryLabel(categoryPath)}
+          </h2>
+          <button
+            onClick={() => setMenuOpen(false)}
+            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg transition lg:hidden"
+            type="button"
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           {articles.length} article{articles.length !== 1 ? "s" : ""}
         </p>
@@ -435,6 +455,18 @@ function CategoryPage() {
       </section>
 
       <section className="md:col-span-8">
+        <div className="flex items-center gap-2 mb-4">
+          {!menuOpen && (
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="lg:hidden p-2 hover:bg-stone-100 dark:hover:bg-zinc-700 rounded-lg transition"
+              type="button"
+              aria-label="Open menu"
+            >
+              ☰
+            </button>
+          )}
+        </div>
         <ArticleDetail article={selectedArticle} />
       </section>
     </main>
@@ -730,6 +762,7 @@ function App() {
           <Route element={<HomePage />} path="/" />
           <Route element={<CategoryPage />} path="/category/:encodedPath" />
           <Route element={<CreateArticlePage />} path="/create-article" />
+          <Route element={<SendMessagePage />} path="/send-message" />
           <Route element={<Navigate replace to="/" />} path="*" />
         </Routes>
       </Shell>
