@@ -21,7 +21,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 
 const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
