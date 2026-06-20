@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/drippoco/static/css/main.8661e929.css",
+    "main.js": "/drippoco/static/js/main.7d1d834e.js",
+    "index.html": "/drippoco/index.html",
+    "main.8661e929.css.map": "/drippoco/static/css/main.8661e929.css.map",
+    "main.7d1d834e.js.map": "/drippoco/static/js/main.7d1d834e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8661e929.css",
+    "static/js/main.7d1d834e.js"
+  ]
+}
