@@ -385,7 +385,7 @@ function CategoryPage() {
   }, [articles]);
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-6 px-5 pt-6 md:grid-cols-12 md:px-8">
+    <main className="mx-auto grid max-w-6xl gap-4 px-4 pt-4 md:gap-6 md:px-8 md:pt-6 md:grid-cols-12">
       <section
         className={`animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-5 shadow-sm md:col-span-4 ${!menuOpen ? "hidden lg:block" : ""}`}
       >
@@ -454,7 +454,7 @@ function CategoryPage() {
         ) : null}
       </section>
 
-      <section className="md:col-span-8">
+      <section className={`${menuOpen ? "md:col-span-8" : "md:col-span-12"}`}>
         <div className="flex items-center gap-2 mb-4">
           {!menuOpen && (
             <button
