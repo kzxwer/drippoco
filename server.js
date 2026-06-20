@@ -4,7 +4,21 @@ const fetch = require("node-fetch");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = ["https://kzxwer.github.io", "http://localhost:3000"];
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    },
+  }),
+);
 
 const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
 
