@@ -352,12 +352,11 @@ function HomePage() {
   return (
     <main className="flex items-center justify-center px-5 py-16 md:px-8">
       <div className="animate-rise rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 p-8 text-center shadow-sm md:p-12">
-        <h1 className="font-serif text-lg font-bold text-zinc-900 dark:text-white md:text-xl">
-          Hello from Drippoco
+        <h1 className="font-serif text-md font-bold text-zinc-900 dark:text-white md:text-lg">
+          Hello, welcome to Drippoco Journal!
+          <br />
+          Select a category or article to read, or create a new article.
         </h1>
-        <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-          Use the glasses icon (👓) above to browse articles by category.
-        </p>
       </div>
     </main>
   );
