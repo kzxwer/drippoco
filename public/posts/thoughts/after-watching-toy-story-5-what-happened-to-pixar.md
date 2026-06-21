@@ -2,9 +2,10 @@
 title: After Watching Toy Story 5: What Happened to Pixar?
 summary: After Watching Toy Story 5... (Spoiler Warning)
 tags: toy story 5, pixar, disney, movie, animation, review
-cover: 
+cover: bear.png
 ---
-If I had to summarize my thoughts on *Toy Story 5* in one sentence, it would be this:
+
+If I had to summarize my thoughts on _Toy Story 5_ in one sentence, it would be this:
 
 **"What is happening to Disney Pixar's story team?"**
 
@@ -12,9 +13,9 @@ As expected from Pixar, the animation quality and visual presentation were excel
 
 ## I Didn't Like How the Original Characters Were Treated
 
-If you've been a longtime fan of *Toy Story*, it's almost impossible not to have a strong attachment to Woody and Buzz. Not only were they the stars of the world's first fully 3D animated feature film, but they also had distinct personalities and memorable character arcs that made audiences care deeply about them.
+If you've been a longtime fan of _Toy Story_, it's almost impossible not to have a strong attachment to Woody and Buzz. Not only were they the stars of the world's first fully 3D animated feature film, but they also had distinct personalities and memorable character arcs that made audiences care deeply about them.
 
-Watching *Toy Story 5*, I couldn't help but wonder whether the writers still have that same affection for the original characters.
+Watching _Toy Story 5_, I couldn't help but wonder whether the writers still have that same affection for the original characters.
 
 To put it bluntly, it felt as if a new generation had taken over and wanted to move on from the past without much respect for what came before. I understand that some of the scenes were intended as jokes, but seeing Woody portrayed with a balding head and an older-looking body for comedic effect didn't sit well with me as a longtime fan.
 
@@ -24,19 +25,19 @@ The whole thing reminded me of how some people seem eager to replace older ideas
 
 ## Can Toy Story 5 Really Be Considered Part of the Same Series?
 
-I understand that reflecting contemporary trends and weaving together multiple storylines has become a common approach in modern filmmaking. However, I felt that *Toy Story 5* tried to cram in too many ambitious concepts at once: the escape from the island of next-generation Buzz Lightyears, mobile hotspots, drones, coding capabilities, and various other technological elements.
+I understand that reflecting contemporary trends and weaving together multiple storylines has become a common approach in modern filmmaking. However, I felt that _Toy Story 5_ tried to cram in too many ambitious concepts at once: the escape from the island of next-generation Buzz Lightyears, mobile hotspots, drones, coding capabilities, and various other technological elements.
 
-One of the reasons I was able to become so immersed in *Toy Story 1* and *Toy Story 2* was that, although the idea of living toys is obviously unrealistic, the stories blended that fantasy into the real world so naturally that it never felt difficult to accept. In fact, part of the magic was wondering whether toys like these might secretly exist somewhere in reality.
+One of the reasons I was able to become so immersed in _Toy Story 1_ and _Toy Story 2_ was that, although the idea of living toys is obviously unrealistic, the stories blended that fantasy into the real world so naturally that it never felt difficult to accept. In fact, part of the magic was wondering whether toys like these might secretly exist somewhere in reality.
 
 To me, Pixar's greatest strength has always been its ability to maintain a delicate balance between fantasy and realism.
 
-*Toy Story 5*, however, feels as though realism has been pushed aside entirely.
+_Toy Story 5_, however, feels as though realism has been pushed aside entirely.
 
 The over-the-top concept of the Buzz army is one example. Jessie somehow rides and controls a real horse. The toys constantly send text messages behind their owners' backs, yet none of the children ever become suspicious. The toys regularly change locations and appear in completely unexpected places, and the humans simply accept it without question.
 
 Because of this, I no longer felt the tension that made the earlier films so engaging—the nervous excitement of watching living toys desperately try to avoid being discovered by humans.
 
-I first started noticing this shift with Bo Peep's sudden independence and action-hero-like personality in *Toy Story 4*, but *Toy Story 5* convinced me that these sequels are no longer interested in carrying forward what made the original films special. Instead, it feels as though Pixar is simply using the Toy Story intellectual property as a platform for creating a completely different kind of animated movie.
+I first started noticing this shift with Bo Peep's sudden independence and action-hero-like personality in _Toy Story 4_, but _Toy Story 5_ convinced me that these sequels are no longer interested in carrying forward what made the original films special. Instead, it feels as though Pixar is simply using the Toy Story intellectual property as a platform for creating a completely different kind of animated movie.
 
 And then there's Buzz.
 
@@ -72,7 +73,7 @@ I know Disney has always included jokes and references aimed at adults, but in r
 
 ## Final Thoughts
 
-If *Toy Story 6* is eventually released, I will watch it with no expectations.
+If _Toy Story 6_ is eventually released, I will watch it with no expectations.
 
 I've come to realize that I shouldn't expect the same Pixar magic that existed during the studio's golden era.
 
